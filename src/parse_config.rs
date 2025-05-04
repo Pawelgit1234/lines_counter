@@ -11,25 +11,25 @@ impl Config {
             return Err("Wrong count of arguments");
         }
 
-        let path: PathBuf;
+        let mut path: Option<PathBuf> = None;
         let mut is_recursive = false;
 
-        if args.contains(&"-r".to_string()) {
-            is_recursive = true;
-            path = args.iter()
-                .find(|&arg| arg != "-r")
-                .cloned()
-                .map(PathBuf::from)
-                .ok_or("No path provided after -r")?;
-        } else {
-            path = PathBuf::from(args[1].clone());
+        for arg in args.iter().skip(1) {
+            if arg == "-r" {
+                is_recursive = true;
+            } else if path.is_none() {
+                path = Some(PathBuf::from(arg));
+            } else {
+                return Err("Too many arguments");
+            }
         }
 
+        let path = path.ok_or("No path provided")?;
         if !path.exists() {
             return Err("Provided path does not exist");
         }
 
-        if is_recursive == true && path.is_file() {
+        if is_recursive && path.is_file() {
             return Err("Only Paths can be recursive")
         }
 
