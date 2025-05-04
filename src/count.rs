@@ -11,7 +11,7 @@ pub fn count_lines_in_file(file_path: &PathBuf) -> io::Result<usize> {
     Ok(line_count)
 }
 
-pub fn count_line_in_dir(path: &PathBuf, is_recursive: bool) -> io::Result<usize> {
+pub fn count_lines_in_dir(path: &PathBuf, is_recursive: bool) -> io::Result<usize> {
     let mut line_count: usize = 0;
 
     if let Ok(entries) = fs::read_dir(&path) {
@@ -20,7 +20,7 @@ pub fn count_line_in_dir(path: &PathBuf, is_recursive: bool) -> io::Result<usize
             if entry_path.is_file() {
                 line_count += count_lines_in_file(&entry_path)?;
             } else if entry_path.is_dir() && is_recursive {
-                line_count += count_line_in_dir(&entry_path, true)?;
+                line_count += count_lines_in_dir(&entry_path, true)?;
             }
         }
     }

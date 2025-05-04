@@ -19,7 +19,7 @@ fn main() {
             process::exit(1);
         }));
     } else {
-        println!("{}", count::count_line_in_dir(&config.path, config.is_recursive).unwrap_or_else(|err| {
+        println!("{}", count::count_lines_in_dir(&config.path, config.is_recursive).unwrap_or_else(|err| {
             println!("Problelm by reading dir: {err}");
             process::exit(1);
         }));
